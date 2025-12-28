@@ -1,19 +1,25 @@
-import { useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const App = () => {
-  const inputRef = useRef(null);
+  const [time, setTime] = useState(0);
+  const timerRef = useRef(null);
 
-  const changeMe = () => {
-    inputRef.current.focus();
-    inputRef.current.style.backgroundColor = "red";
-    inputRef.current.style.color = "white";
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setTime((prev) => prev + 1);
+    }, 1000);
+    return () => timerRef.current;
+  }, []);
+
+  const stopTimer = () => {
+    clearInterval(timerRef.current);
   };
 
   return (
     <>
-      <input type="text" placeholder="Your name" ref={inputRef} />
+      <h1>{time}</h1>
 
-      <input type="button" onClick={changeMe} value="Change me" />
+      <input type="button" value="Stop" onClick={stopTimer} />
     </>
   );
 };
